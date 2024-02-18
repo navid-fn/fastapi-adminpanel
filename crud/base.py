@@ -1,12 +1,15 @@
 from typing import Any, Generic, Type, TypeVar
-from pydantic import BaseModel
+from fastapi import Depends
+from sqlmodel import Session
+from db.into_db import get_session
 
 
 ModelType = TypeVar("ModelType", bound=Any)
-CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
-UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 
-class CRUDAase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+class CRUDBase(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]) -> None:
-        super().__init__()
+        self.model = model
+
+    def filter_by_id(id: int, db: Session = Depends(get_session)):
+        pass
