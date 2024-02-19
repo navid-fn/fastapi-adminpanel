@@ -24,7 +24,7 @@ class UserCreate(UserBase):
 
 
 class UserRegister(SQLModel):
-    email: str
+    email: EmailStr
     password: str
     username: Union[str, None] = None
 
@@ -35,3 +35,4 @@ class UsersOut(SQLModel):
     first_name: Union[str, None]
     last_name: Union[str, None]
     age: Union[str, None]
+    id: int
