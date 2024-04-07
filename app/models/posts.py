@@ -15,5 +15,11 @@ class Post(PostBase, table=True):
 class PostCreate(PostBase):
     pass
 
+
 class PostGet(PostBase):
     id: int
+
+
+class PostUpdate(SQLModel):
+    title: str
+    description: str

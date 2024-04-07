@@ -4,6 +4,7 @@ from fastapi import Depends, APIRouter, HTTPException
 from sqlmodel import Session, select
 from db.into_db import get_session
 from models.users import User
+from crud import post as post_crud
 
 router = APIRouter()
 
@@ -18,15 +19,11 @@ def get_posts(
 
 
 @router.post("/create", response_model=PostGet)
-def create_post(post: PostCreate, session: Session = Depends(get_session)):
-    owner = session.get(User, post.owner_id)
+def create_post(post_create: PostCreate, session: Session = Depends(get_session)):
+    owner = session.get(User, post_create.owner_id)
     if not owner:
         raise HTTPException(status_code=404, detail="ownder is not exists.")
-    db_post = Post.model_validate(post)
-    session.add(db_post)
-    session.commit()
-    session.refresh(db_post)
-    return db_post
+    return post_crud.create_post(session, post_create)
 
 
 @router.get("/{post_id}", response_model=PostGet)
