@@ -1,6 +1,7 @@
 from sqlmodel import Session, select
-from models.posts import PostCreate, PostUpdate
-from models import Post
+
+from app.models import Post
+from app.models.posts import PostCreate, PostUpdate
 
 
 def create_post(session: Session, post_create: PostCreate) -> Post:

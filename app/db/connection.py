@@ -1,5 +1,6 @@
 from sqlmodel import create_engine
-from configs.settings import settings
+
+from app.configs.settings import settings
 
 database_url = "postgresql+psycopg2://{}:{}@{}:{}/{}".format(
     settings.DATABASE["username"],

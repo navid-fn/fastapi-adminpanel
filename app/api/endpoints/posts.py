@@ -1,10 +1,12 @@
 from typing import List
-from models.posts import Post, PostGet, PostCreate
-from fastapi import Depends, APIRouter, HTTPException
+
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-from db.into_db import get_session
-from models.users import User
-from crud import post as post_crud
+
+from app.crud import post as post_crud
+from app.db.into_db import get_session
+from app.models.posts import Post, PostCreate, PostGet
+from app.models.users import User
 
 router = APIRouter()
 

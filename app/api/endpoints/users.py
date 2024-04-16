@@ -1,9 +1,12 @@
 from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
-from models.users import UserCreate, UserRegister, UserUpdate, UsersOut, User
-from db.into_db import get_session
-from sqlmodel import select, Session, or_
-import crud.user as crud_user
+from sqlmodel import Session, or_, select
+
+import app.crud.user as crud_user
+from app.db.into_db import get_session
+from app.models.users import (User, UserCreate, UserRegister, UsersOut,
+                              UserUpdate)
 
 router = APIRouter()
 

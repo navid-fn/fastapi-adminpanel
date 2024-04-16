@@ -1,6 +1,8 @@
 from typing import Generator
+
 from sqlmodel import Session
-from db.connection import engine
+
+from app.db.connection import engine
 
 
 def get_session() -> Generator:

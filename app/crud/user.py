@@ -1,9 +1,10 @@
-from sqlmodel import Session, select
-from pydantic import EmailStr
 from typing import Any
 
-from security import get_password_hash
-from models.users import User, UserCreate, UserRegister, UserUpdate
+from pydantic import EmailStr
+from sqlmodel import Session, select
+
+from app.configs.security import get_password_hash, verify_password
+from app.models.users import User, UserCreate, UserRegister, UserUpdate
 
 
 def get_user_by_email(session: Session, email: EmailStr) -> Any:
@@ -37,3 +38,12 @@ def update_user(session: Session, user_id: int, user_update: UserUpdate) -> Any:
     session.commit()
     session.refresh(user)
     return user
+
+
+def authenticate(session: Session, username: str, password: str):
+    db_user = get_user_by_email(session, username)
+    if not db_user:
+        return None
+    if not verify_password(password, db_user.password):
+        return None
+    return db_user

@@ -1,5 +1,6 @@
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -12,6 +13,7 @@ class Settings:
         "port": os.environ["DB_PORT"],
         "db_name": os.environ["DB_NAME"],
     }
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
 
 settings = Settings()

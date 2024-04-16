@@ -1,6 +1,7 @@
-from pydantic import EmailStr, BaseModel, validator
-from sqlmodel import SQLModel, Field
 from typing import Optional, Union
+
+from pydantic import BaseModel, EmailStr, validator
+from sqlmodel import Field, SQLModel
 
 
 class UserBase(SQLModel):
@@ -34,8 +35,16 @@ class UserCreate(BaseModel):
     password: str
 
 
-class UserUpdate(UserBase):
-    email: EmailStr
+class UserUpdate(SQLModel):
+    email: EmailStr = ""
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    age: Optional[int] = None
+    phone_number: Optional[str] = None
+    is_active: Optional[bool] = None
+    is_superuser: Optional[bool] = None
+    password: Optional[str] = None
 
 
 class UserRegister(SQLModel):
@@ -55,4 +64,14 @@ class UsersOut(SQLModel):
 
 class Token(SQLModel):
     access_token: str
-    token_type: str
+    token_type: str = "bearer"
+
+
+# Contents of JWT token
+class TokenPayload(SQLModel):
+    sub: int | None = None
+
+
+class LoginForm(SQLModel):
+    username: str
+    password: str
