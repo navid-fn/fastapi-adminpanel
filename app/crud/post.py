@@ -26,3 +26,8 @@ def update_post(session: Session, post_id: int, post_update: PostUpdate):
 
 def get_post_by_owner(session: Session, user_id: int):
     return session.exec(select(Post).where(Post.owner_id == user_id)).all()
+
+
+def delete_post(session: Session, db_post: Post):
+    session.delete(db_post)
+    session.commit()

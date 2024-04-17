@@ -36,7 +36,7 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(SQLModel):
-    email: EmailStr = ""
+    email: Optional[EmailStr] = None
     username: Optional[str] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None

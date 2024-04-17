@@ -1,15 +1,20 @@
-from fastapi import APIRouter, HTTPException, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.api.deps import SessionDep
 from app.configs.security import create_access_token
 from app.crud.user import authenticate
-from app.models.users import LoginForm, Token
+from app.models.users import Token
 
 router = APIRouter()
 
 
 @router.post("/login/access-token")
-async def login_user(session: SessionDep, login_form: LoginForm):
+async def login_user(
+    session: SessionDep, login_form: Annotated[OAuth2PasswordRequestForm, Depends()]
+):
     db_user = authenticate(session, login_form.username, login_form.password)
     if not db_user:
         return HTTPException(

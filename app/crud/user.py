@@ -47,3 +47,8 @@ def authenticate(session: Session, username: str, password: str):
     if not verify_password(password, db_user.password):
         return None
     return db_user
+
+
+def delete_user(session: Session, user: User):
+    session.delete(user)
+    session.commit()

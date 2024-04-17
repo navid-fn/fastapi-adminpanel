@@ -10,13 +10,13 @@ from app.configs.settings import settings
 from app.db.into_db import get_session
 from app.models.users import TokenPayload, User
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login/access-token")
 
 SessionDep = Annotated[Session, Depends(get_session)]
 TokenDep = Annotated[str, Depends(oauth2_scheme)]
 
 
-def get_current_user(session: SessionDep, token: str = Depends(oauth2_scheme)):
+def get_current_user(session: SessionDep, token: TokenDep):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -32,7 +32,7 @@ def get_current_user(session: SessionDep, token: str = Depends(oauth2_scheme)):
             algorithms=[ALGORITHM],
         )
         token_data = TokenPayload(**payload)
-    except JWTError:
+    except Exception as e:
         raise credentials_exception
     user = session.get(User, token_data.sub)
     if not user:
@@ -41,3 +41,18 @@ def get_current_user(session: SessionDep, token: str = Depends(oauth2_scheme)):
 
 
 CurrenctUser = Annotated[User, Depends(get_current_user)]
+
+
+def get_current_super_user(user: CurrenctUser):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    if not user.is_superuser:
+        raise credentials_exception
+    return user
+
+
+IsSuperUser = Depends(get_current_super_user)
