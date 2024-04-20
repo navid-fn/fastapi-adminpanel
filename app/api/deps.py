@@ -32,7 +32,7 @@ def get_current_user(session: SessionDep, token: TokenDep):
             algorithms=[ALGORITHM],
         )
         token_data = TokenPayload(**payload)
-    except Exception as e:
+    except JWTError:
         raise credentials_exception
     user = session.get(User, token_data.sub)
     if not user:
